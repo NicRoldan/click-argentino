@@ -1,0 +1,15 @@
+{
+  "name": "Click Argentino",
+  "short_name": "Click Argentino",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/screencapture-argentino-click-2026-01-09-19_14_43.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
