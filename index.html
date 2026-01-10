@@ -1250,7 +1250,20 @@
 
           style="scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.2) transparent;"
 
-        ></div>
+        >
+          <!-- Mensaje de bienvenida estático -->
+          <div id="welcome-message" class="flex items-end gap-4 mb-6 animate-[slide-up_0.3s_ease-out]">
+            <div class="h-12 w-12 rounded-full bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 flex items-center justify-center shadow-xl ring-2 ring-gray-600/30 flex-shrink-0">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+            </div>
+            <div class="max-w-[85%] rounded-2xl rounded-bl-md px-6 py-5 text-base leading-relaxed shadow-lg bg-white/15 backdrop-blur-md text-white border border-white/20 relative">
+              <p class="font-semibold text-lg mb-2">¡Hola! 👋</p>
+              <p class="text-white/90">Soy el asistente de Click Argentino. ¿En qué puedo ayudarte hoy? Puedo responder sobre estrategia digital, IA aplicada o diseño de experiencias.</p>
+            </div>
+          </div>
+        </div>
 
         <div id="chat-typing" class="hidden px-5 pb-3 text-xs text-blue-300 flex items-center gap-2 bg-gray-900/30">
 
@@ -1461,15 +1474,22 @@
 
 
           try {
-
-            const res = await fetch("/api/assistant", {
-
+            // Detectar el entorno y usar la URL correcta
+            const isLocalhost = window.location.hostname === 'localhost' || 
+                               window.location.hostname === '127.0.0.1';
+            
+            // En desarrollo local, usar la ruta relativa (el servidor sirve ambos)
+            // En producción (Vercel), también funciona con ruta relativa
+            const apiUrl = "/api/assistant";
+            
+            console.log("🌐 Enviando mensaje a:", apiUrl);
+            console.log("📤 Mensaje:", text);
+            console.log("🧵 Thread ID:", threadId);
+            
+            const res = await fetch(apiUrl, {
               method: "POST",
-
               headers: { "Content-Type": "application/json" },
-
               body: JSON.stringify({ message: text, thread_id: threadId }),
-
             });
 
             const raw = await res.text();

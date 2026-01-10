@@ -1,8 +1,13 @@
 {
   "functions": {
     "api/assistant.js": {
-      "maxDuration": 60
+      "maxDuration": 60,
+      "memory": 1024
     }
+  },
+  "regions": ["iad1"],
+  "env": {
+    "NODE_ENV": "production"
   }
 }
 

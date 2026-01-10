@@ -134,13 +134,26 @@ async function openaiRequest(pathname, options) {
 
   try {
     const response = await fetchFn(url, { ...options, headers });
+    // Leer el texto primero para evitar "body stream already read"
+    const text = await response.text();
+    
     if (!response.ok) {
-      const text = await response.text();
       console.error(`OpenAI API Error [${response.status}]:`, text);
       throw new Error(`OpenAI error ${response.status}: ${text}`);
     }
-    return await response.json();
+    
+    // Parsear el texto como JSON si la respuesta es OK
+    try {
+      return JSON.parse(text);
+    } catch (parseErr) {
+      console.error(`Error parsing JSON response from ${pathname}:`, parseErr.message);
+      console.error("Response text:", text.substring(0, 500));
+      throw new Error(`Invalid JSON response from OpenAI: ${parseErr.message}`);
+    }
   } catch (err) {
+    if (err.message.includes("OpenAI error") || err.message.includes("Invalid JSON")) {
+      throw err;
+    }
     console.error(`Error in openaiRequest to ${pathname}:`, err.message);
     throw err;
   }
@@ -329,19 +342,51 @@ module.exports = async (req, res) => {
       method: "GET",
     });
 
-    const assistantMessages = messagesRes.data.filter((m) => m.role === "assistant");
-    if (!assistantMessages.length) {
+    // Verificar que la respuesta tenga la estructura esperada
+    if (!messagesRes || !messagesRes.data || !Array.isArray(messagesRes.data)) {
+      console.error("❌ Invalid messages response structure:", messagesRes);
       sendJson(res, 500, {
-        error: "No assistant response found",
+        error: "Respuesta inválida del servidor de mensajes",
         thread_id: threadId,
       });
       return;
     }
 
-    const lastMessage = assistantMessages[0];
-    const textContent = lastMessage.content.find((c) => c.type === "text");
-    const reply = textContent ? textContent.text.value : "Sin respuesta";
+    // Filtrar mensajes del asistente (ordenados por creación, más recientes primero)
+    const assistantMessages = messagesRes.data
+      .filter((m) => m.role === "assistant")
+      .sort((a, b) => (b.created_at || 0) - (a.created_at || 0));
 
+    if (!assistantMessages.length) {
+      console.error("❌ No se encontró respuesta del asistente");
+      sendJson(res, 500, {
+        error: "No se encontró respuesta del asistente. Por favor, intenta nuevamente.",
+        thread_id: threadId,
+      });
+      return;
+    }
+
+    // Obtener el último mensaje del asistente
+    const lastMessage = assistantMessages[0];
+    
+    // Extraer el contenido de texto
+    let reply = "Lo siento, no pude generar una respuesta en este momento. Por favor, intenta nuevamente.";
+    
+    if (lastMessage.content && Array.isArray(lastMessage.content)) {
+      const textContent = lastMessage.content.find((c) => c.type === "text");
+      if (textContent && textContent.text && textContent.text.value) {
+        reply = textContent.text.value.trim();
+      }
+    } else if (typeof lastMessage.content === "string") {
+      reply = lastMessage.content.trim();
+    }
+
+    // Validar que la respuesta no esté vacía
+    if (!reply || reply.length === 0) {
+      reply = "Lo siento, la respuesta del asistente está vacía. Por favor, intenta nuevamente.";
+    }
+
+    console.log("✅ Success! Reply length:", reply.length);
     sendJson(res, 200, {
       reply,
       thread_id: threadId,
