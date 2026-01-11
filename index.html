@@ -385,6 +385,39 @@
         border: 1px solid rgba(255, 255, 255, 0.18);
       }
 
+      /* Compacta la escala solo en desktop */
+      @media (min-width: 1024px) {
+        body {
+          font-size: 0.95rem;
+        }
+        .container {
+          max-width: 1100px;
+        }
+        section {
+          padding-top: 4.5rem !important;
+          padding-bottom: 4.5rem !important;
+        }
+        .hero-title {
+          font-size: clamp(2.8rem, 3vw + 1rem, 3.9rem) !important;
+          line-height: 1.1;
+        }
+        .hero-subtitle {
+          font-size: 1.05rem !important;
+        }
+        header img {
+          max-height: 4.5rem;
+        }
+      }
+
+      @media (min-width: 1440px) {
+        body {
+          font-size: 0.93rem;
+        }
+        .container {
+          max-width: 1180px;
+        }
+      }
+
     </style>
 
 
@@ -597,7 +630,7 @@
 
         <div class="container mx-auto px-6 text-center relative z-10">
 
-          <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tighter">
+          <h1 class="hero-title text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tighter">
 
             Escalamos Negocios a la<br />
 
@@ -607,7 +640,7 @@
 
 
 
-          <p class="text-lg md:text-xl max-w-3xl mx-auto text-[var(--subtle-text-light)] dark:text-[var(--subtle-text-dark)]">
+          <p class="hero-subtitle text-lg md:text-xl max-w-3xl mx-auto text-[var(--subtle-text-light)] dark:text-[var(--subtle-text-dark)]">
 
             Pioneros en la conceptualización e implementación de ecosistemas digitales que catalizan el crecimiento, la eficiencia operativa y la supremacía de mercado.
 
@@ -1009,19 +1042,19 @@
 
   <div class="container mx-auto px-6 py-12">
 
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10 lg:gap-14 items-start text-center md:text-left">
 
       
 
       <div class="col-span-1 md:col-span-2">
 
-        <div class="flex items-center justify-center md:justify-start gap-3 sm:gap-4 md:gap-6 lg:gap-10 mb-4">
+        <div class="flex items-center justify-center md:justify-start gap-3 sm:gap-4 md:gap-6 lg:gap-10 mb-4 max-w-[280px] mx-auto md:mx-0">
 
             <img
 
               alt="Click Argentino logo"
 
-              class="h-16 sm:h-32 w-auto object-contain"
+              class="h-16 sm:h-24 w-auto object-contain"
 
               src="/logo-blanco-click.png"
 
@@ -1033,7 +1066,7 @@
 
               alt="Sandbox logo"
 
-              class="h-16 sm:h-32 w-auto object-contain"
+              class="h-16 sm:h-24 w-auto object-contain"
 
               src="/sanbox.png"
 
@@ -1552,5 +1585,4 @@
 
   </body>
 </html>
-
 
