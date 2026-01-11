@@ -15,7 +15,7 @@ if (typeof globalThis.fetch !== 'undefined') {
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const ASSISTANT_ID = process.env.ASSISTANT_ID || process.env.OPENAI_ASSISTANT_ID;
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://www.argentino.click,https://argentino.click,http://localhost:3000")
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "https://www.argentino.click,https://argentino.click,https://click.argentino,http://localhost:3000,http://localhost:3001,https://click-argentino.vercel.app")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
