@@ -1,0 +1,21 @@
+# Robots.txt para Click Argentino
+# https://argentino.click/
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://argentino.click/sitemap.xml
+
+# Bloquear archivos de desarrollo
+Disallow: /generate-og-image.js
+Disallow: /*.js$
+Disallow: /api/
+
+# Permitir archivos de recursos
+Allow: /logo.png
+Allow: /og-image.png
+Allow: /logo.svg
+
+# Crawl delay para ser amables con los servidores
+Crawl-delay: 1
